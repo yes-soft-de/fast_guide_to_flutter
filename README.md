@@ -396,5 +396,163 @@ Row(
 )
 ```
 
+### Changing the Status of the Widget
+
+To do that we have to call function `setState()` which will refresh the widget to hold the new information and render it on the screen. to do that we can make the Price disappear when the "Order" button is Pressed, this would be done using the following function:
+
+```dart
+// ...
+class _PizzaCard extends State<PizzaCard> {
+  bool _isFavorited = false;
+
+  alterFavorite() {
+    setState(() {
+      _isFavorited = true;
+    });
+  }
+// ...
+```
+
+and then we can call the widget to show the appropriate values like that:
+
+```dart
+// The Widget that Holds the Orderd text
+Text(
+  _isFavorited ? 'Ordered' : '20\$',
+  style: TextStyle(color: Colors.black, fontSize: 20),
+),
+// ...
+```
+
+and When clicking the "Order" Button:
+
+```dart
+// ...
+RaisedButton(
+  color: Colors.green,
+  child: Text(
+    'Order',
+    style: TextStyle(color: Colors.white),
+  ),
+  onPressed: alterFavorite,
+),
+// ...
+```
+
+and this is how to change the values in the widgets ...
+
+## Creating Multiple Screen Applications
+
+While we have a concept of "activity" and "fragment" in Android Development, Flutter doesn't use those, instead, Flutter uses the Concept of Screens, this happens by Specifying a some kind of a Home "Screen" and then routing based on a "Navigator", this looks like this:
+
+## Using the Navigator
+
+we have here a simple Application that describes the expected behavior 
+
+```dart
+import 'dart:js';
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return HomePage();
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (_counter > 9) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => WinPage())
+                // This is Where the Routing Happens, So keep this on check ****
+            );
+          } else {
+            _incrementCounter();
+          }
+        },
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class WinPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Second Screen',
+      home: Scaffold(
+        body: Center(
+          child: Text('Hello From Second Screen!'),
+        ),
+      ),
+    );
+  }
+}
+
+```
+
+Here we "routed" the application to `HomePage` Widget, and we moved to a new "widget" when the incrementor passed the number 10.
+
 
 
